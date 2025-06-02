@@ -1,34 +1,23 @@
-package com.example.library.entity;
-
-import jakarta.persistence.*;
+package com.example.library.dto;
 
 import java.util.List;
 
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "user_type")
-@Table(name = "users")
-public class User {
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserDTO {
     private int id;
-
-    @Column
     private String name;
-
-    @Column(name = "max_books_allowed")
     private int maxBooksAllowed;
+    private String userType;
+    private List<BookDTO> bookList;
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE})
-    private List<Book> bookList;
-
-    public User() {
+    public UserDTO() {
     }
 
-    public User(String name, int maxBooksAllowed) {
+    public UserDTO(int id, String name, int maxBooksAllowed, String userType, List<BookDTO> bookList) {
+        this.id = id;
         this.name = name;
         this.maxBooksAllowed = maxBooksAllowed;
+        this.userType = userType;
+        this.bookList = bookList;
     }
 
     public int getId() {
@@ -55,20 +44,29 @@ public class User {
         this.maxBooksAllowed = maxBooksAllowed;
     }
 
-    public List<Book> getBookList() {
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public List<BookDTO> getBookList() {
         return bookList;
     }
 
-    public void setBookList(List<Book> bookList) {
+    public void setBookList(List<BookDTO> bookList) {
         this.bookList = bookList;
     }
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", maxBooksAllowed=" + maxBooksAllowed +
+                ", userType='" + userType + '\'' +
                 ", bookList=" + bookList +
                 '}';
     }

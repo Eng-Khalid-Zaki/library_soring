@@ -12,6 +12,6 @@ public class Student extends User{
     }
 
     public Student(String name, int maxBooksAllowed, String userType) {
-        super(name, maxBooksAllowed, userType);
+        super(name, maxBooksAllowed);
     }
 }

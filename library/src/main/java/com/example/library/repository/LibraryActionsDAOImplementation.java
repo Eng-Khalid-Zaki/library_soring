@@ -1,4 +1,4 @@
-package com.example.library.dao;
+package com.example.library.repository;
 
 import com.example.library.entity.Book;
 import com.example.library.entity.User;
@@ -10,70 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Repository
-public class LibraryActions {
+public class LibraryActionsDAOImplementation {
     private EntityManager entityManager;
 
     @Autowired
-    public LibraryActions(EntityManager entityManager) {
+    public LibraryActionsDAOImplementation(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
-
-    @Transactional
-    public void createUser(User user) {
-        entityManager.persist(user);
-    } //todo finished
-
-    @Transactional
-    public void updateUserName(String name, int userId) throws NoSuchElementException {
-        User currentUser = entityManager.find(User.class, userId);
-        if (currentUser == null) {
-            throw new NoSuchElementException("there is no user with this id");
-        }
-        currentUser.setName(name);
-    } // todo finished
-
-    @Transactional
-    public void updateUserMaxBooksAllowed(int maxBookAllowed, int userId) throws NoSuchElementException {
-        User currentUser = entityManager.find(User.class, userId);
-        if (currentUser == null) {
-            throw new NoSuchElementException("there is no user with this id");
-        }
-        currentUser.setMaxBooksAllowed(maxBookAllowed);
-    } // todo finished
-
-    @Transactional
-    public void updateUserType(String newType, int userId) throws NoSuchElementException {
-        User currentUser = entityManager.find(User.class, userId);
-        if (currentUser == null) {
-            throw new NoSuchElementException("there is no user with this id");
-        }
-
-        if (!newType.equals("student") && !newType.equals("teacher")) {
-            throw new IllegalArgumentException("Only supported student and teacher types");
-        }
-
-        currentUser.setUserType(newType);
-    } //todo
-
-    @Transactional
-    public void deleteUser(int id) throws NoSuchElementException {
-        User user = entityManager.find(User.class, id);
-
-        if (user == null) {
-            throw new NoSuchElementException("There is no user with this id: " + id);
-        }
-
-        for (Book b : getUserBooks(id)) {
-            b.setUser(null);
-        }
-
-        entityManager.remove(user);
-    } // todo finished
 
     @Transactional
     public void createBook(Book book) {
@@ -163,5 +110,9 @@ public class LibraryActions {
         user.getBookList().removeIf(b -> b.getId() == bookId);
     } // todo finished
 
-
+    @Transactional
+    public List<Book> getBooks() {
+        TypedQuery<Book> theQuery = entityManager.createQuery("from Book", Book.class);
+        return theQuery.getResultList();
+    } // todo finished
 }
