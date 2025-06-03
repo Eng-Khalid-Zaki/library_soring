@@ -1,5 +1,6 @@
 package com.example.library.exception;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -18,14 +19,14 @@ public class GlobalExceptionHandler {
         return Map.of(
                 "timestamp", LocalDateTime.now(),
                 "status", HttpStatus.BAD_REQUEST.value(),
-                "error", "Invalid user ID format",
-                "message", "User ID must be a valid integer."
+                "error", "Invalid ID format",
+                "message", "ID must be a valid integer."
         );
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, Object> handleInvalidPathVariable(UserNotFoundException ex) {
+    public Map<String, Object> handleEntityNotFound(UserNotFoundException ex) {
         return Map.of(
                 "timestamp", LocalDateTime.now(),
                 "status", HttpStatus.NOT_FOUND.value(),
@@ -44,8 +45,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BookNotAvailableException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> handleInvalidPathVariable(BookNotAvailableException ex) {
+        return Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.BAD_REQUEST.value(),
+                "message", ex.getMessage()
+        );
+    }
+
+    @ExceptionHandler(BookNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, Object> handleBookNotFoundException(BookNotFoundException ex) {
         return Map.of(
                 "timestamp", LocalDateTime.now(),
                 "status", HttpStatus.NOT_FOUND.value(),

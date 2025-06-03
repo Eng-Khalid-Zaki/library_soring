@@ -5,7 +5,7 @@ public class BookDTO {
     private String title;
     private String author;
     private boolean isIssued;
-    private Integer userId; // Stores the user's ID instead of the full entity
+    private Integer userId;
 
     public BookDTO() {
     }
@@ -46,8 +46,8 @@ public class BookDTO {
         return isIssued;
     }
 
-    public void setIssued(boolean issued) {
-        isIssued = issued;
+    public void setIsIssued(boolean isIssued) {
+        this.isIssued = isIssued;
     }
 
     public Integer getUserId() {

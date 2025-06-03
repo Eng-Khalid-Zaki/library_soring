@@ -1,9 +1,13 @@
 package com.example.library.rest;
 
+import com.example.library.dto.BookDTO;
 import com.example.library.dto.UserDTO;
 import com.example.library.entity.User;
+import com.example.library.repository.BookRepository;
 import com.example.library.service.UserService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,7 +58,26 @@ public class UserRestController {
     }
 
     @DeleteMapping("id/{id}")
-    public void deleteUser(@PathVariable int id) {
+    public ResponseEntity<String> deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
+        return ResponseEntity.ok("User deleted successfully");
     }
+
+    @GetMapping("/id/{id}/books")
+    public List<BookDTO> getUserBooks(@PathVariable int id) {
+        return userService.findUserBooks(id);
+    }
+
+    @PostMapping("/issue")
+    public ResponseEntity<String> issueBook(@RequestParam int userId, @RequestParam int bookId) {
+        userService.issueBook(userId, bookId);
+        return ResponseEntity.ok("Book issued successfully");
+    }
+
+    @PutMapping("return")
+    public ResponseEntity<String> returnBook(@RequestParam int userId, @RequestParam int bookId) {
+        userService.returnBook(userId, bookId);
+        return ResponseEntity.ok("Book returned successfully");
+    }
+
 }
